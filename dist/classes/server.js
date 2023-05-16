@@ -49,6 +49,9 @@ class Server {
     escucharSockets() {
         console.log('escuchando conexiones -sockets');
         this.io.on('connection', cliente => {
+            // console.log(cliente.id)
+            socket.coneectarCliente(cliente);
+            socket.configirarUsuario(cliente, this.io);
             console.log('cliente conectado');
             socket.mensaje(cliente, this.io);
             socket.desconectar(cliente);
