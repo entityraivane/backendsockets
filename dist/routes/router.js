@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
 const server_1 = __importDefault(require("../classes/server"));
+const socket_1 = require("../sockets/socket");
 exports.router = (0, express_1.Router)();
 exports.router.get('/mensajes', (req, res) => {
     res.json({
@@ -46,5 +47,22 @@ exports.router.post('/mensajes/:id', (req, res) => {
         de,
         id
     });
+});
+exports.router.get('/usuarios', (req, res) => {
+    const server = server_1.default.instance;
+    const clients = server.io.sockets.sockets;
+    const socketIds = Array.from(clients.keys()); // Obtener los identificadores de socket
+    console.log(socketIds);
+    res.json({
+        ok: true,
+        clients: socketIds
+    });
+});
+exports.router.get('/usuarios/detalle', (req, res) => {
+    res.json({
+        ok: true,
+        clientes: socket_1.usuariosConectados.getLista()
+    });
+    socket_1.usuariosConectados;
 });
 exports.default = exports.router;

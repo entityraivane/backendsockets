@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import Server from "../classes/server";
+import { usuariosConectados } from "../sockets/socket";
 
 export const router = Router()
 router.get('/mensajes', (req: Request, res: Response) => {
@@ -43,5 +44,22 @@ router.post('/mensajes/:id', (req: Request, res: Response) => {
         de,
         id
     })
+})
+router.get('/usuarios', (req: Request, res: Response) => {
+    const server = Server.instance;
+    const clients = server.io.sockets.sockets;
+    const socketIds = Array.from(clients.keys()); // Obtener los identificadores de socket
+    console.log(socketIds)
+    res.json({
+        ok: true,
+        clients: socketIds
+    })
+})
+router.get('/usuarios/detalle', (req: Request, res: Response) => {
+    res.json({
+        ok:true,
+        clientes:usuariosConectados.getLista()
+    })
+    usuariosConectados
 })
 export default router
